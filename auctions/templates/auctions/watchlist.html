@@ -1,0 +1,18 @@
+{% extends 'auctions/layout.html' %}
+{% block body %}
+    This is a future watchlist for {{ user.get_username }}
+
+    <ul> 
+
+    {% for item in watchlist %}
+        <li> 
+            <a href="{% url 'auction:listing' item.item.id %}">{{ item.item }}</a><br> 
+            <form action="{% url 'auction:watchlist' user.get_username %}" method="POST">
+                {% csrf_token %}
+                <button type='submit' name='d_watchlist' value={{item.item.id}}>Remove item form watchlist</button> 
+            </form> 
+        </li> 
+    {% endfor %}
+
+    </ul>
+{% endblock %}

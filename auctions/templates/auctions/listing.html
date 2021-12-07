@@ -1,0 +1,108 @@
+{% extends 'auctions/layout.html' %}
+
+
+{% block body %}
+<h1>Listing</h1>
+
+<ul>
+    <li>  
+        <h2>{{ item.product_name}} </h2>
+    </li> 
+    <li> 
+        <p>{{ item.decription }}</p>
+    </li>
+    {% if item.img %}
+        <li> 
+            <img src='{{ item.img }}'>
+        </li> 
+    {% else %}
+            <li>I am sorry there is not image</li> 
+    {% endif %}
+    <li> 
+        {{ item.price }} - {{ item.h_bid }}
+    </li> 
+    <li>
+        {% if item.active %}
+            {{ item.h_bidder }}
+        {% else %} 
+            <h4>Winner is: {{ item.h_bidder}} with price {{ item.h_bid }}</h4>
+        {% endif %}
+    </li>
+    <li> 
+        {{ item.owner }}
+    </li>
+    {% if item.category %}
+        <li> 
+            {{ item.category }}
+        </li>  
+    {% else %}
+        <li>
+            No category
+        </li> 
+    {% endif %}
+<ul>
+
+{% if user.is_authenticated %}
+    <p>Place for new comment</p> 
+
+    {% if item.active %}
+
+        {% if owner %}
+            Do you want to close the bidding?
+            <form action="{% url 'auction:listing' item.id %}" method="POST">
+                {% csrf_token %}
+                <button type ='submit' name ='close_listing'>Close Listing</button> 
+            </form>
+            
+        {% else %}
+            {% comment %} put bit on item  {% endcomment %}
+            {% if h_bidder %}
+                <h2>Currently you have the highest bit on the item</h2> 
+            {% else %}
+                <p>Form to bid on item</p>
+                <form action="{% url 'auction:bid' item.id %}" method="POST">
+                    {% csrf_token %}
+                    {{ f_bid }}
+                    <button type='submit'>Place a bid</button> 
+                </form> 
+            {% endif %}        
+
+            {% comment %} Add item to watch list if on the watch list it removes it {% endcomment %}
+            <form action={% url 'auction:watchlist' user.get_username %} method="POST"> 
+                {% csrf_token %}
+                {% if watchlist.watched %}
+                    <button type= 'submit' disabled>Already on watchlist</button>
+                {% else %}
+                    <input type = 'hidden' value = {{ item.id }} name='item'>
+                    <button type='submit' name='watchlist'>Add to watchlist</button>
+                {% endif %}
+            </form> 
+            
+
+        {% endif %}
+    {% else %}
+        {% if h_bidder %}
+            <h3>You have won the auction</h3>
+        {% else %}
+            <h3>Listing is no longer active</h3>
+        {% endif %}
+
+
+    {% endif %}
+{% endif %}  
+<h4>Comments</h4>
+    {% for comment in comments %}
+    <div style='border: 1px solid black'>
+        <p><b>{{ comment.title }}</b></p> 
+        <p>{{ comment.text }}</p> 
+        <span>{{ comment.user }} </p>
+    </div>
+    {% endfor%}
+    {% if user.is_authenticated %}
+        <form action="{% url 'auction:new_comment' item.id %}" method="POST"> 
+            {% csrf_token %}
+            {{ f_new_comment}}
+            <button type = 'submit' name = 'new_comment'>Add new comment</button>
+        </form>
+    {% endif %}
+{% endblock %}

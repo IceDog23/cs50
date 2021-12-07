@@ -1,0 +1,18 @@
+{% extends 'auctions/layout.html' %}
+
+{% block body %}
+    {% if user.is_authenticated %}
+        <h3>Create listing</h3> 
+        <form action={% url 'auction:create_listing' %} method = "POST">
+            {% csrf_token %}
+            {{ form }}
+            <input type='submit' value='Create New Listing'>
+        </form>
+        
+    {% else %}
+        <h3>User not signed it</h3> 
+        <p>Please <a href="{% url 'auction:login' %}">sign in</a> or <a href="{% url 'auction:register' %}">register</a> to create new listing</p
+    {% endif%}
+
+
+{% endblock%}

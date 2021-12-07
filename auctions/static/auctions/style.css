@@ -1,0 +1,44 @@
+body {
+    background-color: #e6e6e6;
+}
+
+a {
+    text-decoration: none;
+    color: black
+}
+
+h3 {
+    text-align:center;
+    color: rebeccapurple;
+}
+
+h5 {
+    margin: 1rem 0 0.5rem;
+    color:red;
+}
+
+.product-tile > div > img {
+    max-width: 200px;
+    max-height: 200px;
+}
+
+.product-tile > div > p {
+    text-align: center;
+}
+
+.mdl-grid {
+    width: 80%;
+}
+
+.mdl-cell {
+    background-color: white;
+    text-align: center;
+    padding: 0.5rem;
+    border-radius: 5px;
+    /* max-width: 300px; */
+}
+
+.mdl-cell--4-col {
+    margin: 2rem 0.5rem;
+}
+
